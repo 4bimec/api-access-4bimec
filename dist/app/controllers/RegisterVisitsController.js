@@ -49,7 +49,7 @@ class RegisterVisitsController {
         visitLocal: request.body.visitLocal,
         reason: request.body.reason,
         vehicle: request.body.vehicle,
-        plate: request.body.plate,
+        plate: request.body.plate.toUpperCase(),
         brand: request.body.brand,
         model: request.body.model,
         color: request.body.color,
