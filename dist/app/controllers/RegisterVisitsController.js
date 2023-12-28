@@ -44,7 +44,7 @@ class RegisterVisitsController {
           name: visit.dataValues.name,
           email: visit.dataValues.email,
           rg: visit.dataValues.rg,
-          path: `https://10.12.112.24:3008/visits-file/${visit.dataValues.path}` ,
+          path: `//10.12.112.24:3008/visits-file/${visit.dataValues.path}` ,
         },
         visitLocal: request.body.visitLocal,
         reason: request.body.reason,
@@ -111,7 +111,6 @@ class RegisterVisitsController {
         },
         {
           departureDate,
-
           departureTime,
           status,
         }

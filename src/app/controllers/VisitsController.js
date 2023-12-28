@@ -12,7 +12,7 @@ class VisitsController {
       const schema = Yup.object().shape({
         name: Yup.string(),
         rg: Yup.string(),
-        cpf: Yup.string(),
+        cpf: Yup.string().min(14,"Mínimo 11 números").max(14, "Máximo 11 números"),
         phone: Yup.string(),
         email: Yup.string().email(),
         birth: Yup.string(),
@@ -53,21 +53,43 @@ class VisitsController {
         namefather,
       } = request.body
 
-      const people = await Visits.create({
-        name,
-        rg,
-        cpf,
-        phone,
-        email,
-        gener,
-        birth,
-        address,
-        numberhouse,
-        zipcode,
-        namemother,
-        namefather,
-        path,
-      })
+
+      const existingVisit = await Visits.findOne({
+        where: {
+          cpf: cpf,
+        },
+      });
+  
+      if (existingVisit) {
+        return response.status(400).json({ message: "CPF já cadastrado!" });
+      }
+  
+    const validNames = (propsEntry) => {
+      return propsEntry
+      .toLowerCase() 
+      .replace(/\b\w/g, (l) => l.toUpperCase());
+    }
+   
+    const normalizedData = {
+      name: validNames(name),
+      rg, 
+      cpf,
+      phone,
+      email: email.toLowerCase(),
+      gener,
+      birth,
+      address: validNames(address),
+      numberhouse,
+      zipcode,
+      namemother: validNames(namemother),
+      namefather: validNames(namefather),
+      path,
+    };
+
+
+  
+
+    const people = await Visits.create(normalizedData);
 
       return (
         
@@ -103,7 +125,6 @@ class VisitsController {
 
       const { id } = req.params
       const peopleId = await Visits.findByPk(id)
-console.log(id)
       peopleId.destroy({ id })
       return resp.status(200).json({ message: "Pessoa deletada com sucesso!" })
     } catch (error) {
