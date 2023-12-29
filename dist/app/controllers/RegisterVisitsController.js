@@ -1,4 +1,4 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { newObj[key] = obj[key]; } } } newObj.default = obj; return newObj; } } function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _yup = require('yup'); var Yup = _interopRequireWildcard(_yup);
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { newObj[key] = obj[key]; } } } newObj.default = obj; return newObj; } } function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; } function _optionalChain(ops) { let lastAccessLHS = undefined; let value = ops[0]; let i = 1; while (i < ops.length) { const op = ops[i]; const fn = ops[i + 1]; i += 2; if ((op === 'optionalAccess' || op === 'optionalCall') && value == null) { return undefined; } if (op === 'access' || op === 'optionalAccess') { lastAccessLHS = value; value = fn(value); } else if (op === 'call' || op === 'optionalCall') { value = fn((...args) => value.call(lastAccessLHS, ...args)); lastAccessLHS = undefined; } } return value; }var _yup = require('yup'); var Yup = _interopRequireWildcard(_yup);
 var _User = require('../models/User'); var _User2 = _interopRequireDefault(_User);
 var _RegisterVisitsSchema = require('../schemas/RegisterVisitsSchema'); var _RegisterVisitsSchema2 = _interopRequireDefault(_RegisterVisitsSchema);
 var _VisitsStatusSchema = require('../schemas/VisitsStatusSchema'); var _VisitsStatusSchema2 = _interopRequireDefault(_VisitsStatusSchema);
@@ -49,7 +49,7 @@ class RegisterVisitsController {
         visitLocal: request.body.visitLocal,
         reason: request.body.reason,
         vehicle: request.body.vehicle,
-        plate: request.body.plate.toUpperCase(),
+        plate: _optionalChain([request, 'access', _ => _.body, 'access', _2 => _2.plate, 'optionalAccess', _3 => _3.toUpperCase, 'call', _4 => _4()]),
         brand: request.body.brand,
         model: request.body.model,
         color: request.body.color,

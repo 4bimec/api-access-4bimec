@@ -1,11 +1,5 @@
 import * as Yup from "yup"
-// import Category from "../models/Category"
-import User from "../models/User"
-import database from "../../database"
-import { Sequelize } from "sequelize"
 import Visits from "../models/Visits"
-
-const sequelize = database.connection
 class VisitsController {
   async store(request, response) {
     try {
@@ -34,8 +28,6 @@ class VisitsController {
         })
       }
 
-
-
       const { filename: path } = request.file
     
       const {
@@ -54,13 +46,13 @@ class VisitsController {
       } = request.body
 
 
-      const existingVisit = await Visits.findOne({
+      const existingVisitCpf = await Visits.findOne({
         where: {
           cpf: cpf,
         },
       });
   
-      if (existingVisit) {
+      if (existingVisitCpf) {
         return response.status(400).json({ message: "CPF já cadastrado!" });
       }
   
@@ -86,13 +78,9 @@ class VisitsController {
       path,
     };
 
-
-  
-
     const people = await Visits.create(normalizedData);
 
       return (
-        
         response.status(201).json(
           people
         )
@@ -114,15 +102,6 @@ class VisitsController {
 
   async delete(req, resp) {
     try {
-
-  // const { admin: isAdmin } = await User.findByPk(request.userId)
-
- //  if (!isAdmin) {
- //    return response.status(401).json({
-//       message: "Não autorizado",
-  //   })
- //  }
-
       const { id } = req.params
       const peopleId = await Visits.findByPk(id)
       peopleId.destroy({ id })
@@ -189,20 +168,27 @@ class VisitsController {
         namefather,
       } = req.body
 
+
+    const validNames = (propsEntry) => {
+      return propsEntry
+      .toLowerCase() 
+      .replace(/\b\w/g, (l) => l.toUpperCase());
+    }
+   
       await Visits.update(
         {
-          name,
-          rg,
+          name: validNames(name),
+          rg, 
           cpf,
           phone,
-          email,
+          email: email.toLowerCase(),
           gener,
           birth,
-          address,
+          address: validNames(address),
           numberhouse,
           zipcode,
-          namemother,
-          namefather,
+          namemother: validNames(namemother),
+          namefather: validNames(namefather),
           path,
         },
         {
