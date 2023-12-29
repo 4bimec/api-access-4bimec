@@ -1,11 +1,5 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { newObj[key] = obj[key]; } } } newObj.default = obj; return newObj; } } function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _yup = require('yup'); var Yup = _interopRequireWildcard(_yup);
-// import Category from "../models/Category"
-var _User = require('../models/User'); var _User2 = _interopRequireDefault(_User);
-var _database = require('../../database'); var _database2 = _interopRequireDefault(_database);
-var _sequelize = require('sequelize');
 var _Visits = require('../models/Visits'); var _Visits2 = _interopRequireDefault(_Visits);
-
-const sequelize = _database2.default.connection
 class VisitsController {
   async store(request, response) {
     try {
@@ -34,8 +28,6 @@ class VisitsController {
         })
       }
 
-
-
       const { filename: path } = request.file
     
       const {
@@ -54,13 +46,13 @@ class VisitsController {
       } = request.body
 
 
-      const existingVisit = await _Visits2.default.findOne({
+      const existingVisitCpf = await _Visits2.default.findOne({
         where: {
           cpf: cpf,
         },
       });
   
-      if (existingVisit) {
+      if (existingVisitCpf) {
         return response.status(400).json({ message: "CPF já cadastrado!" });
       }
   
@@ -86,13 +78,9 @@ class VisitsController {
       path,
     };
 
-
-  
-
     const people = await _Visits2.default.create(normalizedData);
 
       return (
-        
         response.status(201).json(
           people
         )
@@ -114,15 +102,6 @@ class VisitsController {
 
   async delete(req, resp) {
     try {
-
-  // const { admin: isAdmin } = await User.findByPk(request.userId)
-
- //  if (!isAdmin) {
- //    return response.status(401).json({
-//       message: "Não autorizado",
-  //   })
- //  }
-
       const { id } = req.params
       const peopleId = await _Visits2.default.findByPk(id)
       peopleId.destroy({ id })
@@ -189,20 +168,27 @@ class VisitsController {
         namefather,
       } = req.body
 
+
+    const validNames = (propsEntry) => {
+      return propsEntry
+      .toLowerCase() 
+      .replace(/\b\w/g, (l) => l.toUpperCase());
+    }
+   
       await _Visits2.default.update(
         {
-          name,
-          rg,
+          name: validNames(name),
+          rg, 
           cpf,
           phone,
-          email,
+          email: email.toLowerCase(),
           gener,
           birth,
-          address,
+          address: validNames(address),
           numberhouse,
           zipcode,
-          namemother,
-          namefather,
+          namemother: validNames(namemother),
+          namefather: validNames(namefather),
           path,
         },
         {
