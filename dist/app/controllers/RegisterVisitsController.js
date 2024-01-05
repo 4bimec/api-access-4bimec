@@ -3,6 +3,7 @@ var _User = require('../models/User'); var _User2 = _interopRequireDefault(_User
 var _RegisterVisitsSchema = require('../schemas/RegisterVisitsSchema'); var _RegisterVisitsSchema2 = _interopRequireDefault(_RegisterVisitsSchema);
 var _VisitsStatusSchema = require('../schemas/VisitsStatusSchema'); var _VisitsStatusSchema2 = _interopRequireDefault(_VisitsStatusSchema);
 var _Visits = require('../models/Visits'); var _Visits2 = _interopRequireDefault(_Visits);
+
 // * CONTROLLER PARA AS REQUISIÇÕES, INFORMAÇÕES DAS ROTAS DE REGISTRO DE VISITAS */
 
 class RegisterVisitsController {

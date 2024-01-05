@@ -3,6 +3,7 @@ import User from "../models/User"
 import RegisterVisitsSchema from "../schemas/RegisterVisitsSchema"
 import VisitsStatusSchema from "../schemas/VisitsStatusSchema"
 import Visits from "../models/Visits"
+
 // * CONTROLLER PARA AS REQUISIÇÕES, INFORMAÇÕES DAS ROTAS DE REGISTRO DE VISITAS */
 
 class RegisterVisitsController {

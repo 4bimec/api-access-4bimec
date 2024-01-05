@@ -10,9 +10,10 @@ const options = {
 
 const httpsServer = https.createServer(options, app);
 
-const httpsPort = process.env.HTTPS_PORT || 3008;
+  const httpsPort = process.env.HTTPS_PORT || 3008
+  const port = process.env.PORT || 3007
 
-const port = process.env.PORT || 3007;
+
 
 httpsServer.listen(httpsPort, () => {
   console.log(`Servidor HTTPS rodando na porta ${httpsPort}`);
